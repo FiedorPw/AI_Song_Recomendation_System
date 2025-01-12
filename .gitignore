@@ -1,2 +1,110 @@
 workspace_model_data/
 dataset/
+.idea/
+__pycache__/
+lightning_logs/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+pip-wheel-metadata/
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyTorch-specific files
+*.pth
+torch_model.pth
+*.pt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+*.hypothesis
+.pytest_cache/
+pytestdebug.log
+.cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Cython debug symbols
+cython_debug/
+
+# Temporary files
+*.tmp
+*.log
+*.temp
+
+# MacOS-specific files
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*.bak
+*~
+
+# Coverage reports
+.coverage
+.coverage.*
+
+# TensorBoard logs
+runs/
+
+# System-specific files
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.*
+
+# Debug files
+debug.log
+
+# Miscellaneous
+logs/
+*.out
+*.err
