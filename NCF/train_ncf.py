@@ -5,9 +5,6 @@ from torch.utils.data import Dataset, DataLoader
 import pandas as pd
 import numpy as np
 
-########################################################################
-#                DATASET DEFINITION
-########################################################################
 class SongDataset(Dataset):
     """
     Reads a CSV with columns: [user_id, track_id, event_type, track_id_idx].
@@ -53,9 +50,6 @@ class SongDataset(Dataset):
             torch.tensor(label, dtype=torch.float)
         )
 
-########################################################################
-#                NEURAL CF MODEL DEFINITION
-########################################################################
 class NeuralCF(nn.Module):
     """
     Minimal neural collaborative filtering model:
@@ -88,9 +82,6 @@ class NeuralCF(nn.Module):
         out = self.mlp(x).squeeze(dim=-1)  # shape: [batch_size]
         return out
 
-########################################################################
-#                TRAINING LOGIC
-########################################################################
 if __name__ == "__main__":
     csv_path      = "workspace_model_data/processed_table.csv"  # Update to your CSV
     batch_size    = 16
@@ -98,11 +89,9 @@ if __name__ == "__main__":
     lr            = 1e-3
     epochs        = 5
 
-    # 1) Create dataset & dataloader
     dataset = SongDataset(csv_path)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
-    # 2) Instantiate model
     model = NeuralCF(num_users=dataset.num_users,
                      num_tracks=dataset.num_tracks,
                      embedding_dim=embedding_dim)
@@ -110,11 +99,9 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
-    # 3) Define optimizer & loss
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    criterion = nn.MSELoss()  # or nn.BCEWithLogitsLoss() for binary
+    criterion = nn.MSELoss()
 
-    # 4) Training loop
     for epoch in range(epochs):
         model.train()
         running_loss = 0.0
@@ -135,17 +122,16 @@ if __name__ == "__main__":
         epoch_loss = running_loss / len(dataloader)
         print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.4f}")
 
-    # 5) Save the trained weights
+    # Save the trained weights
     torch.save(model.state_dict(), "model_weights.pth")
     print("Model weights saved to model_weights.pth")
 
-    # 6) Save user->idx mapping
-    #    We only need user->idx for inference.
+    # Save user->idx mapping
     user_map_df = pd.DataFrame(list(dataset.user2idx.items()), columns=['user_id', 'user_idx'])
     user_map_df.to_csv("user_map.csv", index=False)
     print("User map saved to user_map.csv")
 
-    # 7) Save track_idx->track_id mapping
+    # Save track_idx->track_id mapping
     track_map_df = pd.DataFrame(list(dataset.idx2track.items()), columns=['track_id_idx', 'track_id'])
     track_map_df.to_csv("track_map.csv", index=False)
     print("Track map saved to track_map.csv")
