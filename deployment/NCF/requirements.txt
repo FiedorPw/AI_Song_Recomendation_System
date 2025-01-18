@@ -1,0 +1,4 @@
+torch
+Flask
+pandas
+numpy

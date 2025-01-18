@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  knn:
+    build:
+      context: ./KNN
+      dockerfile: Dockerfile
+    container_name: knn_service
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./KNN/workspace_model_data:/app/workspace_model_data
+    network_mode: host
+
+  ncf:
+    build:
+      context: ./NCF
+      dockerfile: Dockerfile
+    container_name: ncf_service
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./NCF/user_map.csv:/app/user_map.csv
+      - ./NCF/track_map.csv:/app/track_map.csv
+      - ./NCF/model_weights.pth:/app/model_weights.pth
+    network_mode: host
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    container_name: proxy_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - knn
+      - ncf
+    environment:
+      NCF_ENDPOINT: "http://ncf_service:7000/predict"
+      KNN_ENDPOINT: "http://knn_service:6000/predict"
+    network_mode: host
+
+  mock_user:
+    build:
+      context: ./mock_user
+      dockerfile: Dockerfile
+    container_name: mock_user_service #
+    ports:
+      - "5000:5000"
+    depends_on:
+      - proxy
+    environment:
+      PROXY_URL: "http://proxy_service:8080" # Environment variable for Proxy URL
+    network_mode: host
