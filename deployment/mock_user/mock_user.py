@@ -13,16 +13,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configuration
-PROXY_URL = 'http://localhost:8080'  # Base URL for the proxy service
+PROXY_URL = 'http://localhost:8080'
 REQUEST_INTERVAL = 5  # seconds between requests
 
 # Possible actions to assign to each song
 ACTIONS = ['like', 'dislike', 'skip']
 
 def send_request_and_feedback():
-    """
-    Function to continuously send requests and feedback to the proxy
-    """
     while True:
         try:
             # Step 1: Get recommendations from proxy
@@ -84,6 +81,4 @@ def start_background_thread():
 start_background_thread()
 
 if __name__ == '__main__':
-    # Start the background thread immediately
-    # Run the Flask app
     app.run(host='0.0.0.0', port=5000)

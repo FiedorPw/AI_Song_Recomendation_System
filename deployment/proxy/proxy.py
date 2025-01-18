@@ -71,7 +71,6 @@ def feedback():
         if not track or not reaction:
             return jsonify({"error": "Each feedback entry must include 'track_id' and 'reaction'."}), 400
 
-        # Get the model used for this track and add it to feedback_data
         model = track_model_mapping.get(track, 'unknown')
         feedback_data.append((model, track, reaction))
 
